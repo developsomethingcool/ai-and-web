@@ -1,0 +1,86 @@
+# 🐾 Animal Guessing Game
+
+## Overview
+The **Animal Guessing Game** is a fun, interactive web app built with Streamlit that allows users to guess the name of an animal based on a series of clues. The clues and the animal are dynamically generated using OpenAI's GPT-4 API. Players can track their progress with detailed game statistics.
+
+## Features
+- 🎮 **Interactive Gameplay**: Guess the animal using up to three clues.
+- 🤖 **AI-Generated Clues**: Leverages OpenAI GPT-4 to create unique and interesting clues for each game.
+- 📊 **Game Statistics**: Tracks games played, games won, and average guesses per game.
+- 🎉 **Win Celebrations**: Displays animations for correct answers.
+- 🔄 **Hint System**: Option to reveal additional clues if you're stuck.
+- 🌟 **Streamlit-Powered UI**: Clean and responsive interface for a smooth user experience.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.8 or higher
+- OpenAI API Key
+- A `.env` file containing your OpenAI API key (`OPENAI_API_KEY`).
+
+### Installation
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/developsomethingcool/Guessing-game-with-stats
+   cd animal-guessing-game
+
+
+2. Set Up Your Environment
+Install Dependencies:
+Make sure you have all the necessary Python packages installed. Run:
+
+bash
+Copy code
+pip install -r requirements.txt
+Create the .env File:
+Create a .env file in the project root directory to store your OpenAI API key securely:
+
+plaintext
+Copy code
+OPENAI_API_KEY=your-openai-api-key
+Run the App:
+Start the Streamlit app:
+
+bash
+Copy code
+streamlit run app.py
+
+#### How to Play
+Start a New Game:
+
+Click the "🐾 Start New Game" button to begin.
+The app will fetch a random animal and generate up to three clues.
+Guess the Animal:
+
+Type your guess in the input field and click "Guess."
+If correct, the app celebrates with balloons and updates your statistics.
+Hints and Options:
+
+If unsure, click "🔄 Show Another Hint" to reveal additional clues (up to three clues total).
+You can click "Give up?" to reveal the correct answer and start a new game.
+Track Your Stats:
+
+Visit the "Stats" page in the sidebar to view your game statistics, including games played, games won, and average guesses per game.
+
+
+#### How to Features
+Interactive Gameplay
+Start a new game, guess the animal, and view feedback in real time.
+Receive up to three AI-generated clues to help you make your guess.
+AI-Generated Clues
+Each game dynamically fetches unique animals and clues using OpenAI’s GPT-4 model.
+Hint System
+Reveal up to three hints if you need help guessing the animal.
+Win/Loss System
+Celebrate correct guesses with Streamlit animations.
+View the correct answer if you give up.
+Game Statistics
+Games Played: Tracks how many games you’ve started.
+Games Won: Tracks how many games you’ve won.
+Average Guesses per Game: Shows your efficiency.
+Per-Game Statistics: Visualized as a bar chart.
+Stylish Interface
+Built with custom CSS for a clean, user-friendly design.
+Designed to look great on all screen sizes.
