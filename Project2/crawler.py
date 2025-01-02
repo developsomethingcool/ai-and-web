@@ -45,13 +45,11 @@ class WebCrawler:
                 self.index[word] = []
             if url not in self.index[word]:
                 self.index[word].append(url)
-        #print(f"Indexed words for {url}: {list(self.index.keys())}")
 
 
     def search(self, words):
         words = [word.lower() for word in words]  # Normalize to lowercase
         results = [set(self.index.get(word, [])) for word in words]
-        #print(f"Intermediate results for {words}: {results}")
         return list(set.intersection(*results)) if results else []
     
 if __name__ == "__main__":
