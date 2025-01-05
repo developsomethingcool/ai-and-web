@@ -2,12 +2,28 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 import re
+import os
+from whoosh.fields import Schema, TEXT, ID
+from whoosh.index import create_in, open_dir
+from whoosh.qparser import QueryParser
+from whoosh.writing import AsyncWriter
 
 class WebCrawler:
-    def __init__(self, base_url):
+    def __init__(self, base_url, index_dir="indexdir"):
         self.base_url = base_url
         self.visited = set()
-        self.index = {}
+        self.index_dir = index_dir
+
+        # Create or open the Whoosh index
+        if not os.path.exists(self.index_dir):
+            os.mkdir(self.index_dir)
+            schema = Schema(
+                url=ID(stored=True, unique=True),  # Unique identifier for each document
+                content=TEXT  # Full-text searchable content
+            )
+            self.ix = create_in(self.index_dir, schema)
+        else:
+            self.ix = open_dir(self.index_dir)
 
     def crawl(self, url):
         """Crawl the url and follow links on the same server"""
@@ -39,19 +55,20 @@ class WebCrawler:
         return urlparse(url).netloc == urlparse(self.base_url).netloc
     
     def index_page(self, url, text):
-        words = re.findall(r'\w+', text.lower())
-        for word in words:
-            if word not in self.index:
-                self.index[word] = []
-            if url not in self.index[word]:
-                self.index[word].append(url)
+        """Index a page using Whoosh."""
+        writer = AsyncWriter(self.ix)
+        writer.update_document(url=url, content=text)
+        writer.commit()
 
 
     def search(self, words):
-        words = [word.lower() for word in words]  # Normalize to lowercase
-        results = [set(self.index.get(word, [])) for word in words]
-        return list(set.intersection(*results)) if results else []
-    
+        """Search the Whoosh index."""
+        with self.ix.searcher() as searcher:
+            query_parser = QueryParser("content", schema=self.ix.schema)
+            query = query_parser.parse(" ".join(words))
+            results = searcher.search(query)
+            return [hit["url"] for hit in results]
+        
 if __name__ == "__main__":
     base_url = "https://vm009.rz.uos.de/crawl/index.html"
     crawler = WebCrawler(base_url)
