@@ -19,6 +19,8 @@ class WebCrawler:
             os.mkdir(self.index_dir)
             schema = Schema(
                 url=ID(stored=True, unique=True),  # Unique identifier for each document
+                title=TEXT(stored=True),
+                teaser=TEXT(stored=True),
                 content=TEXT  # Full-text searchable content
             )
             self.ix = create_in(self.index_dir, schema)
@@ -56,8 +58,16 @@ class WebCrawler:
     
     def index_page(self, url, text):
         """Index a page using Whoosh."""
+        soup = BeautifulSoup(text, "html.parser")
+        title = soup.title.string if soup.title else "No Title"
+        #print("title:", title)
+        body_text = soup.get_text(separator=' ', strip=True)
+        #print("body text:", body_text)
+        teaser = text[:200]
+        #print("teaser:", teaser)
+
         writer = AsyncWriter(self.ix)
-        writer.update_document(url=url, content=text)
+        writer.update_document(url=url, title=title, teaser=teaser, content=body_text)
         writer.commit()
 
 

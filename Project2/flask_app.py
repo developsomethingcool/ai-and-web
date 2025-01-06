@@ -52,7 +52,14 @@ def word_search():
             """
 
         # Format results as clickable links
-        results_html = "".join(f"<li><a href='{hit['url']}'>{hit['url']}</a></li>" for hit in results)
+        results_html = "".join(
+        f"<li>"
+        f"<a href='{hit['url']}'>{hit['title']}</a><br>"
+        f"<small>{hit['teaser']}</small>"
+        f"</li>"
+        for hit in results
+        )
+
         return f"""
             <h1>Search results for '{search_term}':</h1>
             <ul>{results_html}</ul>
