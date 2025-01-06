@@ -1,4 +1,4 @@
-flask
-whoosh
-BeautifulSoup4
+Flask
+Whoosh
+beautifulsoup4
 requests
