@@ -4,7 +4,8 @@ from whoosh.qparser import QueryParser
 
 app = Flask(__name__)
 
-base_url = "https://vm009.rz.uos.de/crawl/index.html"
+#base_url = "https://vm009.rz.uos.de/crawl/index.html"
+base_url = "https://realpython.com/"
 index_dir = "indexdir"
 
 

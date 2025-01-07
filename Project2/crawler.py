@@ -7,6 +7,8 @@ from whoosh.fields import Schema, TEXT, ID
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 from whoosh.writing import AsyncWriter
+import time
+
 
 class WebCrawler:
     def __init__(self, base_url, index_dir="indexdir"):
@@ -36,6 +38,9 @@ class WebCrawler:
 
         try:
             response = requests.get(url)
+
+            time.sleep(1)
+
             # Skip non-HTML responses
             if 'text/html' not in response.headers.get("Content-Type", ''):
                 return
@@ -64,7 +69,7 @@ class WebCrawler:
         body_text = soup.get_text(separator=' ', strip=True)
         #print("body text:", body_text)
         teaser = text[:200]
-        #print("teaser:", teaser)
+        print("teaser:", teaser)
 
         writer = AsyncWriter(self.ix)
         writer.update_document(url=url, title=title, teaser=teaser, content=body_text)
