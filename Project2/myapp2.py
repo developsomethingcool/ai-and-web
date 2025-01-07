@@ -1,12 +1,30 @@
 from flask import Flask, request, render_template_string
-from whoosh.index import open_dir
-from whoosh.qparser import QueryParser
+from whoosh.index import open_dir, create_in
+from whoosh.fields import Schema, TEXT, ID
 from bs4 import BeautifulSoup  # For cleaning up highlight HTML
+import os 
 
 app = Flask(__name__)
 
 # Open the Whoosh index
 index_dir = "indexdir"
+
+def initialize_index(index_dir):
+    """Initialize Whoosh index if it does not exist."""
+    if not os.path.exists(index_dir):
+        os.makedirs(index_dir)
+    if not os.listdir(index_dir):  # Check if directory is empty
+        schema = Schema(
+            url=ID(stored=True, unique=True),
+            title=TEXT(stored=True),
+            content=TEXT(stored=True)
+        )
+        create_in(index_dir, schema)
+
+# Ensure the index directory exists before opening it
+initialize_index(index_dir)
+
+# Open the existing Whoosh index
 ix = open_dir(index_dir)
 
 # HTML Templates

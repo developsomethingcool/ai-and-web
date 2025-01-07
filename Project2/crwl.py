@@ -98,6 +98,7 @@ class WhooshCrawler:
         next_domain = urlparse(url).netloc
         return start_domain == next_domain
 
+
     def finalize_index(self):
         self.writer.commit()
 
