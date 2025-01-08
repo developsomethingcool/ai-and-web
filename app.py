@@ -14,6 +14,10 @@ from flask import Flask, render_template, request
 from whoosh.index import open_dir
 from whoosh.qparser import QueryParser
 
+from crawl import Crawler
+
+
+
 # importing the class Crawler from the other file
 #from crawl import Crawler
 
@@ -52,7 +56,7 @@ def search():
                 results.append({
                     "url": result["url"],
                     "title": result["title"],
-                    "snippet": result["snippet"]
+                    "excerpt": result["excerpt"]
                 })
 
 

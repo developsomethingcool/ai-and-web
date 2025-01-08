@@ -68,24 +68,42 @@ class Crawler:
     
 
 # fetching a web pages
-    def fetching_web_pages (self, url, depth = 5):
-        if depth == 0:
+    def fetching_web_pages(self, url, depth=0, max_depth=5):
+        if depth > max_depth:
+            print(f"Reached max depth for {url}")
             return
-
-        "Fetching web pages, parsing html, extracting links"
 
         # if the URL was already seen, don't add it
         if url in self.seen:
             return
-        # if the URL hasn't been looked at yet, add to the seen set
+        
+        # add the URL to the seen list
         self.seen.add(url)
+        print(f"Fetching: {url}")
 
-        try: 
+        try:
             r = requests.get(url)
-            # check if status is OK
             if r.status_code == 200:
-                print(r.headers)
+                print(f"Successfully fetched: {url}")
+
                 soup = BeautifulSoup(r.content, "html.parser")
+
+                # extract the title and content for indexing
+                title = soup.title.string if soup.title else "Website has no title."
+                content = soup.get_text()
+                excerpt = content[:150]
+
+                # index the page
+                self.index_page(url, title, content, excerpt)
+
+                # fetch and process links
+                for anchor in soup.find_all("a", href=True):
+                    url_complete = urljoin(url, anchor["href"])
+                    if self.valid_url(url_complete):
+                        self.fetching_web_pages(url_complete, depth + 1, max_depth)
+
+        except requests.RequestException as e:
+            print(f"There was an error fetching {url}: {e}")
 
                 # extracting links
                 #for anchor in soup.find_all('a', href = True):
@@ -102,28 +120,25 @@ class Crawler:
 
 
                 # take title and text of the web page
-                title = soup.title.string if soup.title else "Website has no title."
-                content = soup.get_text()
+                
                 # excerpt of the web page for first 150th characters saved
-                excerpt = content[:150]
+               
 
                 # index the web page
-                self.index_page(url, title, content, excerpt)
+               
 
                 # fetch the links that are valid URLs from the web pages
-                for anchor in soup.find_all("a", href = True):
-                    url_complete = urljoin(url, anchor["href"])
-                    if self.valid_url(url_complete):
-                        self.fetching_web_pages(url_complete)
 
-        except requests.RequestException as e:
-            print(f"There was an error fetching {url}: {e}")
+
+
+
 
 
 
     def index_page(self, url, title, content, excerpt):
         "Make index of content of web pages"
-        #text = text.lower()
+
+                #text = text.lower()
         #pattern = r'\b\w+\b'
         # all words of the query should be lowercase and without special characters
         #words = re.findall(pattern, text)
@@ -136,12 +151,12 @@ class Crawler:
         try:
             with AsyncWriter(index) as writer:
                 writer.add_document(
-                    url = url,
-                    title = title,
-                    content = content.lower(),
-                    excerpt = excerpt
+                    url=url,
+                    title=title,
+                    content=content.lower(),
+                    excerpt=excerpt
                 )
-            print(f"FInished indexing: {url}")
+                print(f"Indexed: {url} - Title: {title}")
         except Exception as e:
             print(f"There was an error indexing {url}: {e}")
 
@@ -187,7 +202,14 @@ if __name__ == "__main__":
     crawler.fetching_web_pages(start_url)
     print("Crawling and indexing completed.")
 
-
+    # After the crawling process is finished, check the indexed documents
+    print("\nChecking indexed documents:")
+    with index.searcher() as searcher:
+        num_docs = searcher.doc_count()
+        print(f"Total indexed documents: {num_docs}")
+        for doc_num in range(num_docs):
+            stored_fields = searcher.stored_fields(doc_num)
+            print(f"Document {doc_num}: URL: {stored_fields['url']}, Title: {stored_fields['title']}, Excerpt: {stored_fields['excerpt']}")
 
     # parsing html (bs)
     # extracting links
