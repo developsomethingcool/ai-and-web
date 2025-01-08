@@ -355,18 +355,21 @@ body.search-results .container {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
 
-/* Links in result cards */
-.result-card a {
-    color: #00cf81; /* Green link color */
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-decoration: none;
+.result-card {
+    border-radius: 10px; /* Rounded corners */
+    padding: 15px; /* Add inner padding */
+    margin-bottom: 20px; /* Add spacing between cards */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for better depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left; /* Align text to the left */
 }
 
-.result-card a:hover {
-    color: #ff3e6c; /* Change link color on hover */
-    text-decoration: underline;
+/* Hover effect */
+.result-card:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Add hover shadow */
 }
+
 
 /* Back to search link */
 .back-link {
