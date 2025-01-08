@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="search-results">
+    <!-- Cursor Glow -->
+    <div class="cursor-glow"></div>
+
+    <div class="particles-container" id="particles"></div>
+
+    <div class="container">
+        <h1>Search Results</h1>
+        <p class="query-text">Query: <b>{{ query }}</b></p>
+
+        {% if results %}
+        <div>
+            {% for result in results %}
+            <div class="result-card">
+                <a href="{{ result.url }}" target="_blank"><b>{{ result.title }}</b></a>
+                <p class="result-snippet">{{ result.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No results found for "<b>{{ query }}</b>".</p>
+        {% endif %}
+
+        <a href="/" class="back-link">Go back to search</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

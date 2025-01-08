@@ -69,7 +69,7 @@ class WebCrawler:
         body_text = soup.get_text(separator=' ', strip=True)
         #print("body text:", body_text)
         teaser = text[:200]
-        print("teaser:", teaser)
+        #print("teaser:", teaser)
 
         writer = AsyncWriter(self.ix)
         writer.update_document(url=url, title=title, teaser=teaser, content=body_text)
@@ -83,6 +83,15 @@ class WebCrawler:
             query = query_parser.parse(" ".join(words))
             results = searcher.search(query)
             return [hit["url"] for hit in results]
+        
+    def finalize_index(self):
+        """Finalize the Whoosh index, committing all changes."""
+        try:
+            self.ix.writer().commit()
+            print("Index finalized and commited successfully")
+        except Exception as e:
+            print(f"Error finalizing index: {e}")
+
         
 if __name__ == "__main__":
     base_url = "https://vm009.rz.uos.de/crawl/index.html"
