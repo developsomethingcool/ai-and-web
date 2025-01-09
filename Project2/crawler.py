@@ -66,6 +66,13 @@ class WebCrawler:
         soup = BeautifulSoup(text, "html.parser")
         title = soup.title.string if soup.title else "No Title"
         #print("title:", title)
+
+        # no title on web page --> search for headers
+        #if title == "No Title":
+        #    header = soup.find(['h1', 'h2', 'h3'])
+        #    if header:
+        #        title = header.get_text(strip=True)
+
         body_text = soup.get_text(separator=' ', strip=True)
         #print("body text:", body_text)
         teaser = text[:200]
