@@ -1,2 +1,1 @@
-from reverse import app
-application = app
+from flask_app.py import app as application
