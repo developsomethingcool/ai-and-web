@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Easy Search</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="search-form">
+    <!-- Animated background particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Cursor glow effect -->
+    <div class="cursor-glow"></div>
+
+    <div class="logo-container">
+        <div class="logo-glow"></div>
+        <h1 class="logo">EASY SEARCH</h1>
+        <p class="subtitle">You search it, we find it.</p>
+    </div>
+
+    <div class="search-container">
+        <form class="search-bar" action="/word_search" method="get">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="What are you looking for?" 
+                name="q" 
+                autocomplete="off"
+                required
+            >
+            <button type="submit" class="search-button">
+                <i class="fas fa-arrow-right"></i> SEARCH
+            </button>
+        </form>
+        {% if error %}
+        <div style="color: red; margin-top: 10px;">{{ error }}</div>
+        {% endif %}
+    </div>
+
+    <!--<div class="category-grid">
+        <div class="category-card">
+            <i class="fas fa-gamepad"></i>
+            <h3>Games</h3>
+        </div>
+        <div class="category-card">
+            <i class="fas fa-music"></i>
+            <h3>Music</h3>
+        </div>
+        <div class="category-card">
+            <i class="fas fa-video"></i>
+            <h3>Videos</h3>
+        </div>
+        <div class="category-card">
+            <i class="fas fa-camera"></i>
+            <h3>Photos</h3>
+        </div>
+    </div> -->
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
